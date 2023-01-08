@@ -1,4 +1,4 @@
-module github.com/heroku/go-getting-started
+module github.com/samjay22/SocialService
 
 // +heroku goVersion go1.17
 go 1.17
