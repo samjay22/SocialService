@@ -1,8 +1,8 @@
 package services
 
 import (
-	"github.com/samjay22/SocialService/database"
-	"github.com/samjay22/SocialService/structs"
+	"github.com/heroku/go-getting-started/database"
+	"github.com/heroku/go-getting-started/structs"
 )
 
 type UserService interface {

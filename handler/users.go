@@ -2,8 +2,8 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/heroku/go-getting-started/services"
 	jsoniter "github.com/json-iterator/go"
-	"github.com/samjay22/SocialService/services"
 )
 
 type userHandler struct {
