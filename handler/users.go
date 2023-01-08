@@ -36,7 +36,13 @@ func (s *userHandler) GetUser(context *gin.Context) {
 		return
 	}
 
-	user, err := s.userService.GetUserByID(userData.UserId)
+	err = s.userService.CreateUser(context, userData.UserId)
+	if err != nil {
+		context.AbortWithError(404, err)
+		return
+	}
+
+	user, err := s.userService.GetUserByID(context, userData.UserId)
 	if err != nil {
 		context.AbortWithError(404, err)
 		return
