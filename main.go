@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/heroku/go-getting-started/database"
-	"github.com/heroku/go-getting-started/handler"
-	"github.com/heroku/go-getting-started/services"
+	"github.com/samjay22/SocialService/database"
+	"github.com/samjay22/SocialService/handler"
+	"github.com/samjay22/SocialService/services"
 	"os"
 
 	"github.com/gin-gonic/gin"

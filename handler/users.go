@@ -2,7 +2,8 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/heroku/go-getting-started/services"
+	"github.com/samjay22/SocialService/services"
+
 	jsoniter "github.com/json-iterator/go"
 )
 

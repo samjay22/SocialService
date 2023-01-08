@@ -3,7 +3,7 @@ package database
 import (
 	"errors"
 	"fmt"
-	"github.com/heroku/go-getting-started/structs"
+	"github.com/samjay22/SocialService/structs"
 )
 
 type Database interface {
