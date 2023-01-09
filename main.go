@@ -44,9 +44,6 @@ func main() {
 		port = "8080"
 	}
 
-	os.Setenv("REDIS_URL", "redis-13118.c232.us-east-1-2.ec2.cloud.redislabs.com:13118")
-	os.Setenv("REDIS_PASS", "Xy18Xl2QAVRRamX2ELD4cSEZprSUfdrd")
-
 	router := gin.New()
 	router.Use(gin.Logger())
 
