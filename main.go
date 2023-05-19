@@ -1,10 +1,11 @@
 package main
 
 import (
+	"os"
+
 	"github.com/samjay22/SocialService/database"
 	"github.com/samjay22/SocialService/handler"
 	"github.com/samjay22/SocialService/services"
-	"os"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/heroku/x/hmetrics/onload"
@@ -19,14 +20,18 @@ type Services struct {
 }
 
 func InitServices() *Services {
-	databaseObject := database.NewMockDatabase()
+	db, err := database.NewMockDatabase("redis://default:Vem71YeMHS3JqSpsYF17YhfXZHh4FKVg@redis-11523.c276.us-east-1-2.ec2.cloud.redislabs.com:11523")
+	if err != nil {
+		return nil
+	}
 
-	userService := services.NewUserService(databaseObject)
+	userService := services.NewUserService(db)
 
 	return &Services{
 		userService: userService,
 	}
 }
+
 func InitHandlers(services *Services, router *gin.Engine) *Handlers {
 
 	userHandler := handler.NewUserHandler(services.userService)
