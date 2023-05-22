@@ -1,8 +1,12 @@
 package handler
 
 import (
+	"encoding/json"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/samjay22/SocialService/services"
+	"github.com/samjay22/SocialService/structs"
 
 	jsoniter "github.com/json-iterator/go"
 )
@@ -12,14 +16,37 @@ type userHandler struct {
 }
 
 type UserHandler interface {
+	RegisterRoutes(router *gin.Engine)
 }
 
 func (s *userHandler) RegisterRoutes(router *gin.Engine) {
-	router.GET("/users", s.GetUser)
+	router.GET("/getUser", s.GetUser)
+	router.POST("/createUser", s.CreateUser)
+	router.POST("/addFriend", s.AddFriend)
 }
 
-type GetUserRequest struct {
-	UserId string `json:"userId"`
+// function to add a friend to a user
+func (s *userHandler) AddFriend(context *gin.Context) {
+	body, err := context.GetRawData()
+	if err != nil {
+		context.AbortWithError(404, err)
+		return
+	}
+
+	userData := structs.AddFriendRequest{}
+	err = jsoniter.Unmarshal(body, &userData)
+	if err != nil {
+		context.AbortWithError(400, err)
+		return
+	}
+
+	err = s.userService.AddUserAsFriend(context, userData.UserId, userData.FriendId)
+	if err != nil {
+		context.AbortWithError(500, err)
+		return
+	}
+
+	context.JSON(http.StatusOK, gin.H{"message": "Friend added successfully"})
 }
 
 func (s *userHandler) GetUser(context *gin.Context) {
@@ -29,16 +56,10 @@ func (s *userHandler) GetUser(context *gin.Context) {
 		return
 	}
 
-	userData := GetUserRequest{}
+	userData := structs.GetUserRequest{}
 	err = jsoniter.Unmarshal(body, &userData)
 	if err != nil {
 		context.AbortWithError(400, err)
-		return
-	}
-
-	err = s.userService.CreateUser(context, userData.UserId)
-	if err != nil {
-		context.AbortWithError(404, err)
 		return
 	}
 
@@ -56,7 +77,32 @@ func (s *userHandler) GetUser(context *gin.Context) {
 	context.Writer.Write(response)
 }
 
-func NewUserHandler(userService services.UserService) *userHandler {
+func (s *userHandler) CreateUser(context *gin.Context) {
+	var userData structs.CreateUserProfileRequest
+
+	body, err := context.GetRawData()
+	if err != nil {
+		context.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+
+	err = json.Unmarshal(body, &userData)
+	if err != nil {
+		context.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	// Call your user service to create the user
+	err = s.userService.CreateUser(context, &userData)
+	if err != nil {
+		context.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+
+	context.JSON(http.StatusOK, gin.H{"message": "User created successfully"})
+}
+
+func NewUserHandler(userService services.UserService) UserHandler {
 	return &userHandler{
 		userService: userService,
 	}

@@ -17,6 +17,7 @@ type Handlers struct {
 
 type Services struct {
 	userService services.UserService
+	authService services.AuthService
 }
 
 func InitServices() *Services {
@@ -26,13 +27,18 @@ func InitServices() *Services {
 	}
 
 	userService := services.NewUserService(db)
+	authService := services.NewAuthService()
 
 	return &Services{
 		userService: userService,
+		authService: authService,
 	}
 }
 
 func InitHandlers(services *Services, router *gin.Engine) *Handlers {
+
+	authService := handler.NewAuthHandler(services.authService)
+	authService.RegisterRoutes(router)
 
 	userHandler := handler.NewUserHandler(services.userService)
 	userHandler.RegisterRoutes(router)
