@@ -25,7 +25,7 @@ func (u *userService) CreateUser(ctx context.Context, newUserProfile *structs.Cr
 		return errors.New("invalid user profile")
 	}
 
-	profileToAdd := structs.NewUserProfile(newUserProfile.ID, newUserProfile.JoinDate, newUserProfile.Name, newUserProfile.Age)
+	profileToAdd := structs.NewUserProfile(newUserProfile.ID, newUserProfile.JoinDate, newUserProfile.Name, newUserProfile.Age, newUserProfile.Intrests, newUserProfile.Country)
 	return u.database.AddUserFromID(ctx, newUserProfile.ID, profileToAdd)
 }
 

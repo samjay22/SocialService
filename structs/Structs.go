@@ -2,12 +2,14 @@ package structs
 
 //Internal usage
 type UserProfile struct {
-	ID       int64
-	JoinDate string
-	Name     string
-	Age      int
-	Role     string
-
+	ID                        int64
+	JoinDate                  string
+	Name                      string
+	Age                       int
+	Role                      string
+	Intrests                  string
+	Country                   string
+	ProfileBackgroundImageURL string
 	//Friends list one to many based on ID. Less storage this way.
 	Friends []int64
 
@@ -60,6 +62,8 @@ type CreateUserProfileRequest struct {
 	JoinDate string `json:"join_date"`
 	Name     string `json:"name"`
 	Age      int    `json:"age"`
+	Intrests string `json:"intrests"`
+	Country  string `json:"country"`
 }
 
 type LoginRequest struct {
@@ -77,13 +81,15 @@ type VerifySessionRequest struct {
 
 //responses
 
-func NewUserProfile(id int64, joinDate string, name string, age int) *UserProfile {
+func NewUserProfile(id int64, joinDate string, name string, age int, intrests string, country string) *UserProfile {
 	return &UserProfile{
 		ID:       id,
 		JoinDate: joinDate,
 		Name:     name,
 		Age:      age,
 		Role:     "Standard",
+		Intrests: intrests,
+		Country:  country,
 		Friends:  []int64{},
 		Posts:    []int64{},
 	}
