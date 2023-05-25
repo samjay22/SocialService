@@ -57,6 +57,11 @@ func main() {
 
 	router := gin.New()
 	router.Use(gin.Logger())
+	router.GET("/", func(ctx *gin.Context) {
+		ctx.JSON(200, gin.H{
+			"message": "Welcome to the Social Service",
+		})
+	})
 
 	services := InitServices()
 	InitHandlers(services, router)
