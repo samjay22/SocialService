@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/samjay22/SocialService/services"
@@ -50,17 +51,15 @@ func (s *userHandler) AddFriend(context *gin.Context) {
 }
 
 func (s *userHandler) GetUser(context *gin.Context) {
-	body, err := context.GetRawData()
+	userIdStr := context.Query("userId")
+	userId, err := strconv.ParseInt(userIdStr, 10, 64)
 	if err != nil {
-		context.AbortWithError(404, err)
+		context.AbortWithError(400, err) // Return a 400 Bad Request if the userId is not a valid int64
 		return
 	}
 
-	userData := structs.GetUserRequest{}
-	err = jsoniter.Unmarshal(body, &userData)
-	if err != nil {
-		context.AbortWithError(400, err)
-		return
+	userData := structs.GetUserRequest{
+		UserId: userId,
 	}
 
 	user, err := s.userService.GetUserByID(context, userData.UserId)
@@ -72,6 +71,7 @@ func (s *userHandler) GetUser(context *gin.Context) {
 	response, err := jsoniter.Marshal(user)
 	if err != nil {
 		context.AbortWithError(500, err)
+		return
 	}
 
 	context.Writer.Write(response)

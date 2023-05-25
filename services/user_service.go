@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/samjay22/SocialService/database"
 	"github.com/samjay22/SocialService/structs"
@@ -19,6 +20,7 @@ type userService struct {
 }
 
 func (u *userService) CreateUser(ctx context.Context, newUserProfile *structs.CreateUserProfileRequest) error {
+	fmt.Println(newUserProfile.Name, newUserProfile.Age, newUserProfile.JoinDate)
 	if newUserProfile.Name == "" || newUserProfile.Age == 0 || newUserProfile.JoinDate == "" {
 		return errors.New("invalid user profile")
 	}
